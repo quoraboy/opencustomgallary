@@ -22,7 +22,7 @@ class ImageGallary {
         coloum_index_data = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)!!
 
         //getfoldername
-        coloum_index_folder_name = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+        coloum_index_folder_name = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
         while (cursor?.moveToNext()) {
             AbsolutePathaOfImage = cursor?.getString(coloum_index_data)
             listofallimage.add(AbsolutePathaOfImage)

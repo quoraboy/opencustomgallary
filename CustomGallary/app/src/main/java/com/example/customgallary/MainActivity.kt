@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadImages() {
         binding.RecyclerGallaryImage.setHasFixedSize(true)
-        binding.RecyclerGallaryImage.layoutManager = GridLayoutManager(this, 4)
+        binding.RecyclerGallaryImage.layoutManager = GridLayoutManager(this, 3)
         var imageGallary = ImageGallary()
         images = imageGallary.listofImage(this)
         gallaryAdaptor = GallaryAdaptor(this, images, object : GallaryAdaptor.PhotoListener {
