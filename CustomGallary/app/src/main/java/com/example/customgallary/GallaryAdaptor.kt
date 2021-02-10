@@ -5,19 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class GallaryAdaptor(context: Context, image: List<String>, photolistner: PhotoListener) :
-    RecyclerView.Adapter<GallaryAdaptor.ViewHolder>() {
+class GallaryAdaptor(context: Context, image: List<String>, hashMap: HashMap<String, String>, photolistner: PhotoListener) :
+        RecyclerView.Adapter<GallaryAdaptor.ViewHolder>() {
     var context: Context
     var image: List<String>
     var photolistner: PhotoListener
+    lateinit var hashMap: HashMap<String, String>
 
     init {
         this.context = context
         this.image = image
         this.photolistner = photolistner
+        this.hashMap = hashMap
     }
 
     interface PhotoListener {
@@ -25,28 +28,30 @@ class GallaryAdaptor(context: Context, image: List<String>, photolistner: PhotoL
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById(R.id.image)
+        var foldername: TextView = itemView.findViewById(R.id.image)
+        var image: ImageView = itemView.findViewById(R.id.image_beside_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-      return  ViewHolder(
-          LayoutInflater.from(context).inflate(R.layout.gallary_item,parent,false)
-      )
-     }
+        return ViewHolder(
+                LayoutInflater.from(context).inflate(R.layout.gallary_item, parent, false)
+        )
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       var image: String =image.get(position)
-        Glide.with(context).load(image).into(holder.image)
+        var imageConcat: String = hashMap.get(image.get(position)).toString()
+        var imagearray = imageConcat.split(",")
+        Glide.with(context).load(imagearray[imagearray.size - 1]).into(holder.image)
+        holder.foldername.text = image.get(position)
         holder.itemView.setOnClickListener {
-            photolistner.onPhotoClick(image)
+            photolistner.onPhotoClick(imagearray.size.toString())
         }
     }
 
     override fun getItemCount(): Int {
-        if(image != null)
-        {
+        if (image != null) {
             return image.size;
         }
 
-        return 0;    }
+        return 0; }
 }

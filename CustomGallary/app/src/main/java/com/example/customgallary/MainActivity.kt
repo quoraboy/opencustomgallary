@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding.RecyclerGallaryImage.layoutManager = GridLayoutManager(this, 3)
         var imageGallary = ImageGallary()
         images = imageGallary.listofImage(this)
-        gallaryAdaptor = GallaryAdaptor(this, images, object : GallaryAdaptor.PhotoListener {
+        gallaryAdaptor = GallaryAdaptor(this, images,imageGallary.getter(), object : GallaryAdaptor.PhotoListener {
             override fun onPhotoClick(path: String) {
                 Toast.makeText(this@MainActivity, path, Toast.LENGTH_LONG).show()
             }
