@@ -43,7 +43,7 @@ class ImageGallary {
 //
 //        it will be compiled as "WHERE (1) GROUP BY (bucket_display_name)", which is correct
 
-        coloum_index_data = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)!!//try catch todo
+        coloum_index_data = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)!!//try catch
 
         //getfoldername
         coloum_index_folder_name = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
