@@ -1,16 +1,24 @@
 package com.example.customgallary
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class GallaryAdaptor(context: Context, image: List<String>, hashMap: HashMap<String, String>, photolistner: PhotoListener) :
-        RecyclerView.Adapter<GallaryAdaptor.ViewHolder>() {
+
+class GallaryAdaptor(
+    context: Context,
+    image: List<String>,
+    hashMap: HashMap<String, String>,
+    photolistner: PhotoListener
+) :
+    RecyclerView.Adapter<GallaryAdaptor.ViewHolder>() {
     var context: Context
     var image: List<String>
     var photolistner: PhotoListener
@@ -34,16 +42,19 @@ class GallaryAdaptor(context: Context, image: List<String>, hashMap: HashMap<Str
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.gallary_item, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.gallary_item, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var imageConcat: String = hashMap.get(image.get(position)).toString()
-        var imagearray = imageConcat.split(",")
+        var imagearray = imageConcat.split(",").toTypedArray()
         Glide.with(context).load(imagearray[imagearray.size - 1]).into(holder.image)
         holder.foldername.text = image.get(position)
         holder.itemView.setOnClickListener {
+            val intent = Intent(context, insidefolderrecycler::class.java)
+            intent.putExtra("key",imagearray)
+            context.startActivity(intent)
             photolistner.onPhotoClick(imagearray.size.toString())
         }
     }
