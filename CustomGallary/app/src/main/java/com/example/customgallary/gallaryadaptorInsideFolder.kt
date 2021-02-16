@@ -37,7 +37,7 @@ class gallaryadaptorInsideFolder(context: Context, image: Array<String>?):Recycl
         return 0; }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var imageConcat: String = image!!.get(image!!.size-1-position)
+        var imageConcat: String = image!!.get(position)
         Glide.with(context).load(imageConcat).into(holder.image)
         holder.itemView.setOnClickListener {
         }

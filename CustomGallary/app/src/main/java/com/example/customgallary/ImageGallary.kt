@@ -8,30 +8,41 @@ import android.provider.MediaStore
 
 class ImageGallary {
     lateinit var hashMap: HashMap<String, String>
-
+    lateinit var uri: Uri
     fun getter(): HashMap<String, String> {
         return hashMap
     }
 
     fun listofImage(context: Context): ArrayList<String> {
         var listofallimage = ArrayList<String>()
-        var listoffolder = ArrayList<String>()
-        lateinit var uri: Uri
+        var listoffolder = HashSet<String>()
+        var listofimageid = ArrayList<Int>()
+        var imageid: Long
+
         var cursor: Cursor? = null
         var coloum_index_data: Int
         var coloum_index_folder_name: Int
         lateinit var AbsolutePathofImage: String
         lateinit var AbsolutePathofImageFolder: String
-      hashMap=HashMap()
+        hashMap = HashMap()
 
         uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //FROM table_name
         var projection =
-                arrayOf("COUNT(*) as count", "GROUP_CONCAT (_data,',') as " + MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME)//projection will decide which columns to return
+            arrayOf(
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            )//projection will decide which columns to return
         //"GROUP_CONCAT( MediaStore.MediaColumns.DATA ) as "+ MediaStore.MediaColumns.DATA
         //MediaStore.MediaColumns.DATA---> this columns contains path of images
         //MediaStore.Images.Media.BUCKET_DISPLAY_NAME ---> this columns contains folder name containing images
         var orderBy: String = MediaStore.Video.Media.DATE_TAKEN
-        cursor = context.contentResolver.query(uri, projection, "1) GROUP BY (" + MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, null, orderBy + " DESC")
+        cursor = context.contentResolver.query(
+            uri,
+            projection,
+            null,
+            null,
+            orderBy + " DESC"
+        )
 
 //        contentResolver adds parentheses when compiling resulting query for sqlLite, so if we make selection like
 //
@@ -43,23 +54,42 @@ class ImageGallary {
 //
 //        it will be compiled as "WHERE (1) GROUP BY (bucket_display_name)", which is correct
 
-        coloum_index_data = cursor?.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)!!//try catch
+        coloum_index_data = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media._ID)!!//try catch
 
         //getfoldername
-        coloum_index_folder_name = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+        coloum_index_folder_name =
+            cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
 
         while (cursor?.moveToNext()) {
+
             AbsolutePathofImageFolder = cursor?.getString(coloum_index_folder_name)
             listoffolder.add(AbsolutePathofImageFolder)
 
-            AbsolutePathofImage = cursor?.getString(coloum_index_data)
-            listofallimage.add(AbsolutePathofImage)
 
-            hashMap.put(AbsolutePathofImageFolder, AbsolutePathofImage)
+            imageid = cursor?.getLong(coloum_index_data)
+
+            val uriImage = Uri.withAppendedPath(uri, "" + imageid)
+            listofimageid.add(imageid.toInt())
+            AbsolutePathofImage = cursor?.getString(coloum_index_data)
+
+            listofallimage.add(uriImage.toString())
+
+           if(hashMap.containsKey(AbsolutePathofImageFolder))
+           {
+             hashMap.put(AbsolutePathofImageFolder,hashMap.get(AbsolutePathofImageFolder)+","+uriImage.toString())
+           }
+            else
+           {
+               hashMap.put(AbsolutePathofImageFolder,uriImage.toString())
+           }
+
+
+
+          //  hashMap.put(uriImage.toString(), AbsolutePathofImageFolder)
 
 
         }
 
-        return listoffolder
+        return ArrayList<String>(listoffolder)
     }
 }

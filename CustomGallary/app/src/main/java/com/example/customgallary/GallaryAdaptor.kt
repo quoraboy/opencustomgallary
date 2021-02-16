@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
@@ -36,8 +35,8 @@ class GallaryAdaptor(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var foldername: TextView = itemView.findViewById(R.id.image)
         var image: ImageView = itemView.findViewById(R.id.image_beside_text)
+        var folder: TextView = itemView.findViewById(R.id.folder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,15 +46,17 @@ class GallaryAdaptor(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var imageConcat: String = hashMap.get(image.get(position)).toString()
-        var imagearray = imageConcat.split(",").toTypedArray()
-        Glide.with(context).load(imagearray[imagearray.size - 1]).into(holder.image)
-        holder.foldername.text = image.get(position)
+        var imageConcat: String? = hashMap.get(image.get(position))
+//        var imageConcat: String =image.get(position)
+        var imagearray = imageConcat?.split(",")?.toTypedArray()
+        Glide.with(context).load(imagearray?.get(0)).into(holder.image)
+//        holder.image.setImageURI(Uri.parse(imageConcat))
+        holder.folder.text = image.get(position)
         holder.itemView.setOnClickListener {
             val intent = Intent(context, insidefolderrecycler::class.java)
-            intent.putExtra("key",imagearray)
+            intent.putExtra("key", imagearray)
             context.startActivity(intent)
-            photolistner.onPhotoClick(imagearray.size.toString())
+            photolistner.onPhotoClick(image.get(position).toString())
         }
     }
 

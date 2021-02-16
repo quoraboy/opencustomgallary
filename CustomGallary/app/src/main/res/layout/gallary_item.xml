@@ -9,14 +9,16 @@
         android:id="@+id/image_beside_text"
         android:layout_width="180dp"
         android:layout_height="180dp"
+        android:outlineSpotShadowColor="@color/black"
         android:padding="2dp"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1"
-        tools:ignore="MissingConstraints"
-        android:outlineSpotShadowColor="@color/black"/>
+        tools:ignore="MissingConstraints" />
+
+
 
     <TextView
-        android:id="@+id/image"
+        android:id="@+id/folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="gallary image"
