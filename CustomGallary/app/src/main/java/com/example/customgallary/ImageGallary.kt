@@ -9,12 +9,18 @@ import android.provider.MediaStore
 class ImageGallary {
     lateinit var hashMap: HashMap<String, String>
     lateinit var uri: Uri
+    var appendingallimages: String? = null
+    var listofallimage = ArrayList<String>()
+
     fun getter(): HashMap<String, String> {
         return hashMap
     }
 
+//    fun getterListofImage(): ArrayList<String> {
+//     return listofallimage
+//    }
+
     fun listofImage(context: Context): ArrayList<String> {
-        var listofallimage = ArrayList<String>()
         var listoffolder = HashSet<String>()
         var listofimageid = ArrayList<Int>()
         var imageid: Long
@@ -70,26 +76,35 @@ class ImageGallary {
 
             val uriImage = Uri.withAppendedPath(uri, "" + imageid)
             listofimageid.add(imageid.toInt())
-            AbsolutePathofImage = cursor?.getString(coloum_index_data)
+            //AbsolutePathofImage = cursor?.getString(coloum_index_data)
 
-            listofallimage.add(uriImage.toString())
+//            listofallimage.add(uriImage.toString())
+            if (appendingallimages==null)
+            {
+                appendingallimages=uriImage.toString()
+            }else
+                appendingallimages = appendingallimages + "," + uriImage.toString()
 
-           if(hashMap.containsKey(AbsolutePathofImageFolder))
-           {
-             hashMap.put(AbsolutePathofImageFolder,hashMap.get(AbsolutePathofImageFolder)+","+uriImage.toString())
-           }
-            else
-           {
-               hashMap.put(AbsolutePathofImageFolder,uriImage.toString())
-           }
+            if (hashMap.containsKey(AbsolutePathofImageFolder)) {
+                hashMap.put(
+                    AbsolutePathofImageFolder,
+                    hashMap.get(AbsolutePathofImageFolder) + "," + uriImage.toString()
+                )
+            } else {
+                hashMap.put(AbsolutePathofImageFolder, uriImage.toString())
+            }
 
 
-
-          //  hashMap.put(uriImage.toString(), AbsolutePathofImageFolder)
+            //  hashMap.put(uriImage.toString(), AbsolutePathofImageFolder)
 
 
         }
+        hashMap.put("All Media", appendingallimages.toString())
 
-        return ArrayList<String>(listoffolder)
+       var arraylistoffolder=ArrayList<String>(listoffolder)
+        arraylistoffolder.add(0,"All Media")
+        arraylistoffolder.remove("Camera")
+        arraylistoffolder.add(1,"Camera")
+        return arraylistoffolder
     }
 }

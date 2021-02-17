@@ -13,7 +13,8 @@
         android:padding="2dp"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 
@@ -25,8 +26,9 @@
         android:hint="Folder name"
         android:translationZ="5dp"
         android:visibility="visible"
+        android:background="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="@+id/image_beside_text"
-        app:layout_constraintEnd_toEndOf="@+id/image_beside_text"
+        app:layout_constraintTop_toTopOf="@+id/image_beside_text"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/image_beside_text"
         tools:ignore="MissingConstraints" />
